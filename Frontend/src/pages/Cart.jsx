@@ -88,30 +88,31 @@ export default function Cart() {
   }
   };
 
-  return (
-    <div className="cart-page">
-      <h2>Your Cart</h2>
+  // console.log(cart.items[0].image);
 
+  return (
+  <div className="cart-page">
+    <h2>Your Cart</h2>
+
+    <div className="cart-container">
       <div className="cart-list">
         {cart.items.map((item) => (
           <div className="cart-item" key={item.id}>
             <div className="cart-info">
-              <h4>{item.product_name}</h4>
-              <p>₹{item.price}</p>
+              <img
+                src={`http://127.0.0.1:8000${item.image}`}
+                alt={item.product_name}
+              />
+              <div className="cart-details">
+                <h4>{item.product_name}</h4>
+                <p className="price">₹{item.price}</p>
+              </div>
             </div>
 
             <div className="cart-actions">
-              <button
-                onClick={() => updateQuantity(item.id, item.quantity - 1)}
-              >
-                -
-              </button>
+              <button onClick={() => updateQuantity(item.id, item.quantity - 1)}>-</button>
               <span>{item.quantity}</span>
-              <button
-                onClick={() => updateQuantity(item.id, item.quantity + 1)}
-              >
-                +
-              </button>
+              <button onClick={() => updateQuantity(item.id, item.quantity + 1)}>+</button>
             </div>
 
             <div className="cart-remove">
@@ -122,11 +123,16 @@ export default function Cart() {
       </div>
 
       <div className="cart-summary">
-        <h3>Total: ₹{cart.total_price}</h3>
-        <button className="checkout-btn" onClick={checkout}>
-          Proceed to Checkout
+        <h3>Order Summary</h3>
+        <p className="total">Total: ₹{cart.total_price}</p>
+        <button
+          className="checkout-btn"
+          onClick={checkout}
+          disabled={processing}
+        >
+          {processing ? "Processing..." : "Proceed to Checkout"}
         </button>
       </div>
     </div>
-  );
-}
+  </div>
+)};

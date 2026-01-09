@@ -62,3 +62,17 @@
   text-align: right;
   font-size: 16px;
 }
+
+
+.order-item {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 6px;
+}
+
+/* 💻 Desktop */
+@media (min-width: 768px) {
+  .order-item {
+    grid-template-columns: 2fr 1fr 1fr;
+  }
+}

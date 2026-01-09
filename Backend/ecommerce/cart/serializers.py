@@ -3,12 +3,13 @@ from .models import Cart, CartItem
 
 class CartItemSerializer(serializers.ModelSerializer):
     product_name = serializers.ReadOnlyField(source='product.name')
+    image = serializers.ReadOnlyField(source='product.image.url') 
     price = serializers.ReadOnlyField(source='product.price')
     subtotal = serializers.SerializerMethodField()
 
     class Meta:
         model = CartItem
-        fields = ('id', 'product', 'product_name', 'price', 'quantity', 'subtotal')
+        fields = ('id', 'product', 'product_name', 'image', 'price', 'quantity', 'subtotal')
 
     def get_subtotal(self, obj):
         return obj.quantity * obj.product.price

@@ -63,3 +63,39 @@
   margin-bottom: 10px;
   text-align: center;
 }
+
+
+.auth-box {
+  width: 100%;
+  max-width: 380px;
+  margin: 80px auto;
+  padding: 28px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+}
+
+.auth-box input {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  font-size: 16px; /* better mobile typing */
+}
+
+.auth-box button {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+}
+
+/* 📱 Mobile */
+@media (max-width: 480px) {
+  .auth-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 40px 16px;
+    height: 90vh;
+    padding: 20px;
+  }
+}
