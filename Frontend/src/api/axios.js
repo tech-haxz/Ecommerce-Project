@@ -15,8 +15,8 @@ api.interceptors.request.use((config) => {
 
 // Auto refresh token
 api.interceptors.response.use(
-  res => res,
-  async error => {
+  (res) => res,
+  async (error) => {
     const originalRequest = error.config;
 
     if (error.response?.status === 401 && !originalRequest._retry) {
@@ -38,7 +38,6 @@ api.interceptors.response.use(
         return api(originalRequest);
       } catch {
         localStorage.clear();
-        window.location.href = "/login";
       }
     }
 

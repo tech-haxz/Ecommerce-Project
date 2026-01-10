@@ -15,7 +15,7 @@ export default function Navbar() {
 
   return (
     <nav className="navbar">
-      <div className="nav-logo">Storify</div>
+      <NavLink to={'/'}><div className="nav-logo">Storify</div></NavLink>
 
       {/* Desktop Links */}
       <div className="nav-links desktop-only">

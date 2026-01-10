@@ -20,3 +20,13 @@ img {
 button {
   font-family: inherit;
 }
+
+
+.Toastify__toast {
+  border-radius: 10px;
+  font-size: 14px;
+}
+.Toastify__toast--success {
+  background: #4bb543;
+  color: white;
+}

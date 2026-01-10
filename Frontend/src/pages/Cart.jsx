@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import api from "../api/axios";
 import "../styles/cart.css";
+import { toastSuccess, toastError } from "../utils/toast";
+
 
 export default function Cart() {
   const [cart, setCart] = useState(null);
@@ -19,20 +21,32 @@ export default function Cart() {
   }, []);
 
   const updateQuantity = async (itemId, quantity) => {
-    if (quantity < 1) return;
+  if (quantity < 1) return;
 
+  try {
     await api.post("cart/update/", {
       item_id: itemId,
       quantity,
     });
 
+    toastSuccess("Cart updated");
     fetchCart();
-  };
+  } catch {
+    toastError("Failed to update cart");
+  }
+};
+
 
   const removeItem = async (itemId) => {
+  try {
     await api.post("cart/remove/", { item_id: itemId });
+    toastSuccess("Item removed from cart");
     fetchCart();
-  };
+  } catch {
+    toastError("Failed to remove item");
+  }
+};
+
 
   if (loading) return <p>Loading cart...</p>;
 
@@ -41,52 +55,45 @@ export default function Cart() {
   }
 
   const checkout = async () => {
-    if (processing) return;
-    setProcessing(true);
+  if (processing) return;
+  setProcessing(true);
 
-    try {
-      // 1️⃣ Create Order
-      const orderRes = await api.post("orders/create/");
-      const orderId = orderRes.data.order_id;
+  try {
+    const orderRes = await api.post("orders/create/");
+    const orderId = orderRes.data.order_id;
 
-      // 2️⃣ Init Payment
-      const paymentRes = await api.post("payments/init/", {
-        order_id: orderId,
-      });
+    const paymentRes = await api.post("payments/init/", {
+      order_id: orderId,
+    });
 
-      const options = {
-        key: paymentRes.data.razorpay_key,
-        amount: paymentRes.data.amount,
-        currency: "INR",
-        name: "E-Commerce App",
-        description: "Order Payment",
-        order_id: paymentRes.data.razorpay_order_id,
+    const options = {
+      key: paymentRes.data.razorpay_key,
+      amount: paymentRes.data.amount,
+      currency: "INR",
+      name: "E-Commerce App",
+      description: "Order Payment",
+      order_id: paymentRes.data.razorpay_order_id,
 
-        handler: async function (response) {
-          // 3️⃣ Verify Payment
-          await api.post("payments/verify/", {
-            razorpay_order_id: response.razorpay_order_id,
-            razorpay_payment_id: response.razorpay_payment_id,
-            razorpay_signature: response.razorpay_signature,
-          });
+      handler: async function (response) {
+        await api.post("payments/verify/", {
+          razorpay_order_id: response.razorpay_order_id,
+          razorpay_payment_id: response.razorpay_payment_id,
+          razorpay_signature: response.razorpay_signature,
+        });
 
-          alert("Payment successful!");
-          window.location.href = "/orders";
-        },
+        toastSuccess("Payment successful 🎉");
+        window.location.href = "/orders";
+      },
+    };
 
-        theme: {
-          color: "#000000",
-        },
-      };
-
-      const razorpay = new window.Razorpay(options);
-      razorpay.open();
-    } catch (err) {
-      alert("Payment failed. Try again.");
-    } finally {
+    new window.Razorpay(options).open();
+  } catch {
+    toastError("Payment failed: Server Down!");
+  } finally {
     setProcessing(false);
   }
-  };
+};
+
 
   // console.log(cart.items[0].image);
 

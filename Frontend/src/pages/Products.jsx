@@ -1,10 +1,15 @@
 import { useEffect, useState } from "react";
 import api from "../api/axios";
 import "../styles/products.css";
+import { toastSuccess, toastError } from "../utils/toast";
+import { useNavigate } from "react-router-dom";
+
+
 
 export default function Products() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     api.get("products/")
@@ -13,16 +18,18 @@ export default function Products() {
   }, []);
 
   const addToCart = async (productId) => {
-    try {
-      await api.post("cart/add/", {
-        product_id: productId,
-        quantity: 1
-      });
-      alert("Added to cart");
-    } catch {
-      alert("Unable to add product");
-    }
-  };
+  try {
+    await api.post("cart/add/", {
+      product_id: productId,
+      quantity: 1,
+    });
+    toastSuccess("Added to cart");
+  } catch {
+    toastError("Login Required");
+    navigate("/login");
+  }
+};
+
 
   if (loading) return <p>Loading products...</p>;
 
