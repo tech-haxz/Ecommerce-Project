@@ -7,6 +7,10 @@ The system is **API-first**, making it scalable and suitable for web and mobile 
 
 ---
 
+## Preview
+<img width="1888" height="904" alt="image" src="https://github.com/user-attachments/assets/e7bd4bf2-7a01-439c-810f-33cc97dbedff" />
+
+
 ## 🚀 Features
 
 ### 🔐 Authentication & Security
